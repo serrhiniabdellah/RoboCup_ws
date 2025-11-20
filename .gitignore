@@ -1,0 +1,17 @@
+# ROS2
+build/
+install/
+log/
+*.pyc
+__pycache__/
+
+# Arduino
+*.elf
+*.hex
+*.eep
+
+# Python
+*.egg-info/
+dist/
+venv/
+.pytest_cache/

@@ -1,0 +1,31 @@
+Les touches peuvent être exécuter en minuscule ou en majuscule 
+
+//mouvement du robot 
+z = avancer
+q = gauche
+s = reculer 
+d = droite
+
+//flipper arrière
+r = flipper arrière haut
+v = flipper arrière bas
+
+//Flipper avant gauche
+a = flipper gauche haut
+w = flipper gauche bas
+
+//Flipper avant droite
+e = flipper droite haut
+c = flipper droite bas
+
+//En mode différentiel
+a = flipper avant haut
+w = flipper avant bas
+
+//Contrôle de la camera mobile 
+p = Mouvement de la camera vers le haut
+m = Mouvement de la camera vers le bas 
+
+
+
+
