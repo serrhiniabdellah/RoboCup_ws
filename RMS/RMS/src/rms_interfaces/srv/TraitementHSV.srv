@@ -1,0 +1,8 @@
+int64 low_h
+int64 high_h
+int64 low_s
+int64 high_s
+int64 low_v
+int64 high_v
+---
+bool success
