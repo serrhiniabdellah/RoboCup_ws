@@ -128,7 +128,7 @@ public:
         scan_sub_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
             "/scan", 1000,
             [this](const sensor_msgs::msg::LaserScan::SharedPtr msg) {
-                double scan_data_recuperation[NUM_SCANS][NUM_VALUES] = {0};
+                static double scan_data_recuperation[NUM_SCANS][NUM_VALUES];
                 for (int i = 0; i < NUM_SCANS; i++) {
                     for (int jj = 0; jj < NUM_VALUES; jj++) {
                         scan_data_recuperation[i][jj] = (jj < (int)msg->ranges.size()) ? msg->ranges[jj] : 0.0;

@@ -167,13 +167,13 @@ private:
 
     void scanCallback(const sensor_msgs::msg::LaserScan::SharedPtr scan)
     {
-        std::vector<float> scan_data[5000];
-        double scan_data_recuperation[NUM_SCANS][NUM_VALUES] = {0};
+        std::vector<float> scan_data[NUM_SCANS];
+        static double scan_data_recuperation[NUM_SCANS][NUM_VALUES]; // Changed to static to avoid dangling pointer
 
         for (int i = 0; i < NUM_SCANS; i++) {
             scan_data[i] = scan->ranges;
             for (int jj = 0; jj < NUM_VALUES; jj++) {
-                scan_data_recuperation[i][jj] = scan_data[i][jj];
+                scan_data_recuperation[i][jj] = (jj < (int)scan_data[i].size()) ? scan_data[i][jj] : 0.0;
                 if (std::isnan(scan_data_recuperation[i][jj]))
                     scan_data_recuperation[i][jj] = 0;
             }
