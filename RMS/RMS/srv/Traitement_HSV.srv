@@ -1,8 +1,14 @@
-int64 LowH
-int64 HighH
-int64 LowS
-int64 HighS
-int64 LowV
-int64 HighV
+# Service ROS 2 : Ajustement dynamique des paramètres de segmentation HSV
+# Permet de modifier en temps réel les seuils de détection d'objets colorés
+# sans redémarrer le nœud de traitement d'image
+# 
+# REQUEST : 6 valeurs de seuillage
+int64 LowH        # Valeur minimale de Hue (teinte) [0-179]
+int64 HighH       # Valeur maximale de Hue (teinte) [0-179]
+int64 LowS        # Valeur minimale de Saturation [0-255]
+int64 HighS       # Valeur maximale de Saturation [0-255]
+int64 LowV        # Valeur minimale de Value (luminosité) [0-255]
+int64 HighV       # Valeur maximale de Value (luminosité) [0-255]
 ---
+# RESPONSE : vide (confirmation implicite)
 

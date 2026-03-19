@@ -1,2 +1,8 @@
-int64 tolerance
+# Service ROS 2 : Configuration de la tolérance de positionnement du bras
+# Définit le pas/incrément de positionnement utilisé par le contrôleur
+# pour asservir le bras vers sa cible
+#
+# REQUEST : tolérance minimale requise
+int64 tolerance   # Tolérance de positionnement en millimètres (ou unité du contrôleur)
 ---
+# RESPONSE : vide (confirmation implicite)
