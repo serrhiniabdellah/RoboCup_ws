@@ -64,6 +64,23 @@ def generate_launch_description():
         #     output='screen',
         # ),
 
+        # ── SLAM : Hector Mapping (Optionnel) ──────────────────────────────────
+        Node(
+            package='hector_mapping',
+            executable='hector_mapping',
+            name='hector_mapping',
+            output='screen',
+            parameters=[{
+                'pub_map_odom_transform': True,
+                'map_frame': 'map',
+                'base_frame': 'base_link',
+                'odom_frame': 'odom',
+                'scan_topic': 'scan',
+                'map_resolution': 0.05,
+                'map_size': 2048,
+            }],
+        ),
+
         # ── (optionnel) Initialisation accéléromètre ─────────────────────────
         # Node(
         #     package='rms_lidar',
