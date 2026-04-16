@@ -163,8 +163,6 @@
 \begin{tabular}{rl}
 \textbf{Formation :}   & IATIC4 \\
 \textbf{Université :}  & Université de Versailles Saint-Quentin-en-Yvelines \\
-\textbf{Encadrant :}   & Rodolphe Thiénard \\
-\textbf{Année :}       & 2024 -- 2025 \\
 \end{tabular}
 }
 
@@ -654,11 +652,11 @@ La deuxième étape a également abouti à la refonte complète du fichier \text
 
 \begin{table}[H]
 \centering
-\begin{tabularx}{\textwidth}{p{3.5cm}Xp{3.5cm}}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3cm} X X}
 \toprule
 \textbf{Fichier} & \textbf{Bug identifié} & \textbf{Correction} \\
 \midrule
-\texttt{deplacement\_robot.js} \texttt{vision\_camera.js} &
+\texttt{deplacement\_robot.js} \newline \texttt{vision\_camera.js} &
 Subscribers 2 à 5 appelaient \texttt{subscriber1.subscribe()} &
 Chaque subscriber appelle sa propre méthode \\
 \midrule
