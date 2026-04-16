@@ -1,0 +1,748 @@
+\documentclass[12pt,a4paper]{report}
+
+% ── Encodage et langue ──────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+% ── Mise en page ─────────────────────────────────────────────────────
+\usepackage[top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% ── Typographie ───────────────────────────────────────────────────────
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% ── Couleurs et boîtes ───────────────────────────────────────────────
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+\definecolor{primary}{RGB}{0,150,200}
+\definecolor{secondary}{RGB}{30,30,60}
+\definecolor{lightbg}{RGB}{240,248,255}
+\definecolor{codegreen}{RGB}{0,128,0}
+\definecolor{codegray}{RGB}{128,128,128}
+\definecolor{codepurple}{RGB}{120,0,120}
+\definecolor{codeblue}{RGB}{0,0,180}
+\definecolor{codered}{RGB}{180,0,0}
+\definecolor{warnyellow}{RGB}{255,193,7}
+\definecolor{successgreen}{RGB}{40,167,69}
+
+% ── Titres ───────────────────────────────────────────────────────────
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+  {\normalfont\LARGE\bfseries\color{secondary}}
+  {\textcolor{primary}{\chaptertitlename\ \thechapter}}{10pt}{\Huge}
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{secondary}}
+  {\textcolor{primary}{\thesection}}{0.8em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{secondary}}
+  {\textcolor{primary}{\thesubsection}}{0.6em}{}
+
+% ── Code ─────────────────────────────────────────────────────────────
+\usepackage{listings}
+\lstdefinelanguage{JavaScript}{
+  keywords={var,let,const,function,return,if,else,for,while,new,true,false,null},
+  keywordstyle=\color{codeblue}\bfseries,
+  ndkeywords={ROSLIB,Ros,Topic,Message},
+  ndkeywordstyle=\color{primary}\bfseries,
+  sensitive=true,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{codegreen}\itshape,
+  stringstyle=\color{codered},
+  morestring=[b]',
+  morestring=[b]"
+}
+\lstdefinelanguage{HTML5}{
+  keywords={<!DOCTYPE,html,head,body,div,span,button,input,canvas,iframe,script,style,link},
+  keywordstyle=\color{codeblue},
+  sensitive=false,
+  comment=[s]{<!--}{-->},
+  commentstyle=\color{codegray}\itshape,
+  stringstyle=\color{codered},
+  morestring=[b]",
+  morestring=[b]'
+}
+\lstset{
+  basicstyle=\ttfamily\small,
+  numbers=left,
+  numberstyle=\tiny\color{codegray},
+  stepnumber=1,
+  numbersep=8pt,
+  backgroundcolor=\color{lightbg},
+  showspaces=false,
+  showstringspaces=false,
+  breaklines=true,
+  frame=single,
+  rulecolor=\color{primary!40},
+  captionpos=b,
+  tabsize=2,
+  aboveskip=10pt,
+  belowskip=10pt
+}
+
+% ── Tableaux ─────────────────────────────────────────────────────────
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+
+% ── Graphiques ───────────────────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage{float}
+
+% ── Liens ────────────────────────────────────────────────────────────
+\usepackage[colorlinks=true,linkcolor=primary,urlcolor=primary,citecolor=primary]{hyperref}
+
+% ── En-têtes et pieds de page ────────────────────────────────────────
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{primary}{\small\textit{Projet RMS — Interface IHM}}}
+\fancyhead[R]{\textcolor{secondary}{\small\leftmark}}
+\fancyfoot[C]{\textcolor{codegray}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── Boîtes personnalisées ─────────────────────────────────────────────
+\newtcolorbox{infobox}[1][]{
+  enhanced, breakable,
+  colback=lightbg, colframe=primary,
+  fonttitle=\bfseries, title=#1,
+  left=6pt, right=6pt, top=6pt, bottom=6pt
+}
+\newtcolorbox{warnbox}[1][]{
+  enhanced, breakable,
+  colback=yellow!10, colframe=warnyellow,
+  fonttitle=\bfseries\color{secondary}, title=#1,
+  left=6pt, right=6pt
+}
+\newtcolorbox{successbox}[1][]{
+  enhanced, breakable,
+  colback=green!8, colframe=successgreen,
+  fonttitle=\bfseries, title=#1,
+  left=6pt, right=6pt
+}
+
+% ════════════════════════════════════════════════════════════════
+\begin{document}
+
+% ── Page de garde ────────────────────────────────────────────────────
+\begin{titlepage}
+\centering
+\vspace*{1cm}
+
+{\color{secondary}\rule{\linewidth}{1.5pt}}
+\vspace{0.5cm}
+
+{\Huge\bfseries\color{secondary} Projet RoboCup Rescue}\\[0.4cm]
+{\LARGE\color{primary} Robot Management System (RMS)}\\[0.8cm]
+
+{\color{secondary}\rule{\linewidth}{0.8pt}}
+\vspace{0.8cm}
+
+{\huge\bfseries Interface IHM Web}\\[0.3cm]
+{\Large Développement en deux étapes}\\[0.3cm]
+{\large\color{codegray}\textit{Contrôle du robot · Bras · LIDAR · Caméra}}
+
+\vspace{1.5cm}
+
+\begin{tcolorbox}[colback=lightbg,colframe=primary,width=0.85\textwidth]
+\centering
+\textbf{Étape 1 — Contrôle du Robot et du Bras}\\
+\textit{SERRHINI Abdellah}\\[0.6cm]
+\textbf{Étape 2 — Visualisation LIDAR et Caméra}\\
+\textit{Mounih Mohamed}
+\end{tcolorbox}
+
+\vspace{1.5cm}
+
+{\large
+\begin{tabular}{rl}
+\textbf{Formation :}   & IATIC4 \\
+\textbf{Université :}  & Université de Versailles Saint-Quentin-en-Yvelines \\
+\textbf{Encadrant :}   & Rodolphe Thiénard \\
+\textbf{Année :}       & 2024 -- 2025 \\
+\end{tabular}
+}
+
+\vfill
+{\color{secondary}\rule{\linewidth}{1.5pt}}
+\end{titlepage}
+
+% ── Table des matières ────────────────────────────────────────────────
+\tableofcontents
+\clearpage
+
+% ════════════════════════════════════════════════════════════════
+\chapter*{Introduction générale}
+\addcontentsline{toc}{chapter}{Introduction générale}
+\markboth{Introduction générale}{}
+
+Le projet RoboCup Rescue vise à développer un robot mobile semi-autonome capable d'intervenir dans des environnements sinistrés pour localiser et assister des victimes. Ce robot, baptisé \textit{RMS (Robot Management System)}, est construit autour
+de la plateforme ROS~2 Jazzy et intègre plusieurs modules spécialisés~: navigation LIDAR, bras robotique, caméra, accéléromètre et interface de pilotage à distance.
+
+Ce rapport se concentre sur la \textbf{partie Interface Homme-Machine (IHM)}, développée sous forme d'une application web légère, accessible depuis n'importe quel navigateur sur le réseau local du robot.
+
+Le développement de cette interface s'est déroulé en \textbf{deux étapes complémentaires}~:
+
+\begin{itemize}
+  \item \textbf{Étape 1} (SERRHINI Abdellah)~: mise en place du contrôle du robot et du bras robotique. Cette première version de l'interface permet la téléopération complète du robot~: déplacement, flippers, orientation de la caméra et contrôle du bras via des sliders.
+  \item \textbf{Étape 2} (Mounih Mohamed)~: enrichissement de l'interface avec la visualisation du LIDAR en temps réel et l'intégration du flux vidéo de la caméra.
+\end{itemize}
+
+L'interface repose sur le protocole \textbf{rosbridge}~: un serveur WebSocket exposant les topics ROS~2 du robot, auxquels le navigateur se connecte via la bibliothèque JavaScript \texttt{roslibjs}.
+
+% ════════════════════════════════════════════════════════════════
+\chapter{Architecture de l'interface IHM}
+
+\section{Contexte technologique}
+
+L'interface IHM est une application web statique (HTML/CSS/JavaScript). Elle ne nécessite aucun framework ni langage serveur~; elle fonctionne entièrement dans le navigateur et communique avec le robot via une connexion WebSocket.
+
+\begin{infobox}[Stack technologique]
+\begin{itemize}
+  \item \textbf{Frontend}~: HTML5, CSS3, JavaScript vanilla
+  \item \textbf{Bibliothèque ROS}~: \texttt{roslibjs} + \texttt{EventEmitter2}
+  \item \textbf{Serveur WebSocket}~: \texttt{rosbridge\_server} (ROS~2)
+  \item \textbf{Serveur de fichiers}~: \texttt{python3 -m http.server 8080}
+  \item \textbf{Branche Git}~: \texttt{interface} / dossier \texttt{IHM\_Robot\_RMS/}
+\end{itemize}
+\end{infobox}
+
+\section{Principe de communication}
+
+La chaîne de communication complète est la suivante~:
+
+\begin{center}
+\texttt{Navigateur} $\xrightarrow{\text{WebSocket ws://ip:9090}}$ \texttt{rosbridge\_server} $\xrightarrow{\text{DDS}}$ \texttt{Nodes ROS~2} $\rightarrow$ \texttt{Hardware}
+\end{center}
+
+\begin{itemize}
+  \item Le navigateur publie des commandes (joystick, sliders) sur des topics ROS~2.
+  \item Il s'abonne aussi à des topics de retour (télémétrie, images LIDAR, flux caméra).
+  \item L'\textbf{IP du robot est configurable} depuis l'interface et persistée en \texttt{localStorage}.
+\end{itemize}
+
+\section{Structure des fichiers}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Fichier} & \textbf{Rôle} \\
+\midrule
+\texttt{index.html}              & Dashboard principal (4 panneaux iframe) \\
+\texttt{deplacement\_robot.*}    & Téléopération du robot (étape 1) \\
+\texttt{deplacement\_bras.*}     & Contrôle du bras (étape 1) \\
+\texttt{vision\_lidar.*}         & Visualiseur LIDAR Canvas (étape 2) \\
+\texttt{vision\_camera.*}        & Flux caméra temps réel (étape 2) \\
+\texttt{*.css}                   & Styles par page \\
+\bottomrule
+\end{tabularx}
+\caption{Organisation des fichiers de l'interface IHM}
+\end{table}
+
+% ════════════════════════════════════════════════════════════════
+\chapter{Étape 1 — Contrôle du Robot et du Bras}
+\chaptermark{Étape 1 — Contrôle Robot et Bras}
+
+\begin{tcolorbox}[colback=primary!10,colframe=primary]
+\textbf{Développeur~:} SERRHINI Abdellah \\
+\textbf{Objectif~:} Permettre le pilotage complet du robot (déplacement, flippers, caméra orientable) et la commande du bras robotique depuis l'interface web.
+\end{tcolorbox}
+
+\section{Déplacement du robot}
+
+\subsection{Interface graphique}
+
+La page \texttt{deplacement\_robot.html} présente deux zones~:
+\begin{itemize}
+  \item \textbf{Zone gauche}~: affichage de la télémétrie du robot (vitesses, inclinaison, boussole).
+  \item \textbf{Zone droite}~: boutons directionnels (avant, reculer, gauche, droite, stop), contrôle des flippers et de la caméra orientable.
+\end{itemize}
+
+\subsection{Topic ROS 2 utilisé}
+
+Toutes les commandes de déplacement sont publiées sur un unique topic~:
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lll}
+\toprule
+\textbf{Topic} & \textbf{Type} & \textbf{Direction} \\
+\midrule
+\texttt{/joy\_ihm} & \texttt{sensor\_msgs/Joy} & Publié \\
+\bottomrule
+\end{tabularx}
+\caption{Topic de commande du déplacement}
+\end{table}
+
+Le message \texttt{Joy} contient~:
+\begin{itemize}
+  \item \textbf{axes[1]}~: avancer (+1.0) / reculer (-1.0)
+  \item \textbf{axes[0]}~: gauche (+1.0) / droite (-1.0)
+  \item \textbf{axes[2]}~: flipper avant-gauche ($\pm$1.0)
+  \item \textbf{buttons[1]}~: flipper avant-droite
+  \item \textbf{buttons[2]}~: flipper arrière
+  \item \textbf{buttons[5]}~: caméra haut
+  \item \textbf{buttons[7]}~: caméra bas
+\end{itemize}
+
+\begin{lstlisting}[language=JavaScript, caption={Envoi du message de déplacement avant sur /joy\_ihm}]
+var topic = new ROSLIB.Topic({
+  ros         : ros,
+  name        : '/joy_ihm',
+  messageType : 'sensor_msgs/Joy'
+});
+
+function deplacement_avant() {
+  var message = new ROSLIB.Message({
+    axes:    [0.0, 1.0, 0.0, 0.0, 0.0, 0.0],
+    buttons: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  });
+  topic.publish(message);
+}
+\end{lstlisting}
+
+\subsection{Contrôle clavier}
+
+En complément des boutons graphiques, un contrôle clavier AZERTY est implémenté~:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{cl}
+\toprule
+\textbf{Touche} & \textbf{Action} \\
+\midrule
+\texttt{Z}       & Avancer \\
+\texttt{S}       & Reculer \\
+\texttt{Q}       & Gauche \\
+\texttt{D}       & Droite \\
+\texttt{A}       & Flipper AVG monter \\
+\texttt{E}       & Flipper AVG descendre \\
+\texttt{M / P}   & Caméra haut / bas \\
+\texttt{Espace}  & Stop \\
+\bottomrule
+\end{tabular}
+\caption{Affectation des touches clavier}
+\end{table}
+
+\begin{infobox}[Sécurité anti-dérive]
+À chaque événement \texttt{keyup}, la commande \texttt{stop()} est automatiquement envoyée. Cela garantit que le robot s'arrête dès que l'opérateur relâche une touche, évitant tout dérive involontaire.
+\end{infobox}
+
+\subsection{Télémétrie en temps réel}
+
+Cinq subscribers ROS~2 affichent les données robot en temps réel dans le DOM~:
+
+\begin{lstlisting}[language=JavaScript, caption={Subscriber correct — chaque variable reçoit ses propres données}]
+var subscriber1 = new ROSLIB.Topic({
+  ros: ros, name: '/vitesse1', messageType: 'std_msgs/Int32'
+});
+subscriber1.subscribe(function(message) {
+  document.getElementById('vitesse1').innerHTML = message.data;
+});
+
+var subscriber2 = new ROSLIB.Topic({
+  ros: ros, name: '/vitesse2', messageType: 'std_msgs/Int32'
+});
+subscriber2.subscribe(function(message) {
+  document.getElementById('vitesse2').innerHTML = message.data;
+});
+// ... (identique pour inclinaison1, inclinaison2, boussole)
+\end{lstlisting}
+
+\begin{warnbox}[Bug critique corrigé]
+Dans la version initiale, les subscribers 2 à 5 appelaient tous \texttt{subscriber1.subscribe()} au lieu de leur propre méthode. Seul le premier subscriber recevait des données~; les champs vitesse2, inclinaison1, inclinaison2 et boussole restaient vides. \textbf{Chaque subscriber appelle désormais sa propre méthode \texttt{.subscribe()}}.
+\end{warnbox}
+
+\section{Contrôle du bras robotique}
+
+\subsection{Interface graphique}
+
+La page \texttt{deplacement\_bras.html} présente~:
+\begin{itemize}
+  \item \textbf{6 sliders} correspondant aux 6 degrés de liberté du bras.
+  \item \textbf{3 boutons} de positions pré-définies~: Rangement, Déploiement, Position haute.
+\end{itemize}
+
+\subsection{Description des sliders}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{clllX}
+\toprule
+\textbf{Axe} & \textbf{Plage} & \textbf{Centre} & \textbf{Mouvement} \\
+\midrule
+X  & 1600 -- 2400 & 2048 & Translation axe 1 \\
+Y  & 1400 -- 2400 & 2048 & Translation axe 2 \\
+Z  & 0 -- 1       & 0.5  & Translation axe 3 (binaire) \\
+RX & 0 -- 4095    & 2048 & Rotation axe 4 \\
+RY & 700 -- 3200  & 2048 & Rotation axe 5 \\
+RZ & $-180$ -- $+180$ & 0 & Rotation axe 6 (degrés) \\
+\bottomrule
+\end{tabularx}
+\caption{Paramètres des sliders de contrôle du bras}
+\end{table}
+
+\subsection{Topic ROS 2 utilisé}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lll}
+\toprule
+\textbf{Topic} & \textbf{Type} & \textbf{Direction} \\
+\midrule
+\texttt{/choix\_pos} & \texttt{std\_msgs/Int16MultiArray} & Publié \\
+\bottomrule
+\end{tabularx}
+\caption{Topic de commande du bras}
+\end{table}
+
+\begin{lstlisting}[language=JavaScript, caption={Publication du message de contrôle du bras}]
+function sendSliderValues() {
+  var message = new ROSLIB.Message({
+    layout : { dim: [], data_offset: 0 },
+    data   : [
+      sliderValues.dx,      // axe X
+      sliderValues.dy,      // axe Y
+      sliderValues.dz,      // axe Z
+      sliderValues.rx,      // rotation X
+      sliderValues.ry,      // rotation Y
+      sliderValues.rz,      // rotation Z
+      sliderValues.bouton   // 0=manuel, 1=rangement, 2=deploiement, 3=haut
+    ]
+  });
+  topic.publish(message);
+}
+\end{lstlisting}
+
+Les positions pré-définies sont gérées par la fonction~:
+
+\begin{lstlisting}[language=JavaScript, caption={Activation d'une position pré-définie}]
+function setButtonValueAndSend(buttonValue) {
+  sliderValues.bouton = buttonValue;
+  sendSliderValues();
+}
+// Appel : setButtonValueAndSend(1) => rangement
+//         setButtonValueAndSend(2) => deploiement
+//         setButtonValueAndSend(3) => position haute
+\end{lstlisting}
+
+\section{Dashboard — Première version}
+
+Dans la première étape, le fichier \texttt{index.html} est un dashboard simplifié présentant les pages de contrôle du robot et du bras sous forme d'iframes. L'opérateur peut~:
+\begin{itemize}
+  \item Configurer l'IP du robot dans la barre supérieure (stockage en \texttt{localStorage}).
+  \item Passer d'une page à l'autre via les boutons de navigation.
+\end{itemize}
+
+\begin{successbox}[Résultats de l'étape 1]
+À l'issue de la première étape, l'opérateur peut piloter le robot en déplacement et en rotation, contrôler les flippers, orienter la caméra et commander le bras robotique depuis n'importe quel navigateur connecté au réseau du robot.
+\end{successbox}
+
+% ════════════════════════════════════════════════════════════════
+\chapter{Étape 2 — Visualisation LIDAR et Caméra}
+\chaptermark{Étape 2 — LIDAR et Caméra}
+
+\begin{tcolorbox}[colback=primary!10,colframe=primary]
+\textbf{Développeur~:} Mounih Mohamed \\
+\textbf{Objectif~:} Enrichir l'interface avec la visualisation des données LIDAR en temps réel sur un canvas HTML5 et l'intégration du flux vidéo de la caméra.
+\end{tcolorbox}
+
+\section{Visualisation LIDAR}
+
+\subsection{Contexte}
+
+Le robot est équipé d'un LIDAR 2D (Hokuyo UST-10LX) publiant ses mesures sur le topic \texttt{/scan}. L'objectif est d'afficher ces données sous forme d'une vue polaire en temps réel dans le navigateur, sans aucun plugin externe.
+
+\subsection{Architecture de la solution}
+
+La solution repose entièrement sur l'API Canvas d'HTML5~:
+
+\begin{enumerate}
+  \item Un subscriber \texttt{roslibjs} s'abonne au topic \texttt{/scan}.
+  \item À chaque message reçu, les données polaires (distance, angle) sont converties en coordonnées cartésiennes et dessinées sur le canvas.
+  \item La vue se rafraîchit automatiquement à chaque nouvelle donnée LIDAR.
+\end{enumerate}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lll}
+\toprule
+\textbf{Topic} & \textbf{Type} & \textbf{Direction} \\
+\midrule
+\texttt{/scan} & \texttt{sensor\_msgs/LaserScan} & Abonné \\
+\bottomrule
+\end{tabularx}
+\caption{Topic LIDAR utilisé}
+\end{table}
+
+\subsection{Algorithme de rendu}
+
+L'algorithme de projection polaire vers cartésien est le suivant~:
+
+\begin{lstlisting}[language=JavaScript, caption={Rendu LIDAR — projection polaire vers cartésien}]
+function drawScan(ranges, angleMin, angleIncrement, rangeMax) {
+  drawBackground(); // reinitialise le canvas
+
+  var cx = W / 2, cy = H / 2;
+  var maxR  = Math.min(W, H) / 2 - 10;
+  var scale = maxR / rangeMax;
+
+  for (var i = 0; i < ranges.length; i++) {
+    var r = ranges[i];
+    // Filtrage : ignorer NaN, Inf et hors portee
+    if (!isFinite(r) || r <= 0 || r > rangeMax) continue;
+
+    var angle = angleMin + i * angleIncrement; // radians
+    // Projection polaire -> cartesien (axe Y du canvas inverse)
+    var x = cx + Math.sin(angle) * r * scale;
+    var y = cy - Math.cos(angle) * r * scale;
+
+    // Couleur dependante de la distance
+    // (rouge = proche, vert = loin)
+    var ratio = r / rangeMax;
+    var red   = Math.round(255 * (1 - ratio));
+    var green = Math.round(255 * ratio);
+    ctx.fillStyle = 'rgb(' + red + ',' + green + ',100)';
+    ctx.fillRect(x - 2, y - 2, 4, 4);
+  }
+}
+\end{lstlisting}
+
+\subsection{Éléments visuels du canvas}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Élément} & \textbf{Description} \\
+\midrule
+Fond noir & \texttt{\#0a0a1a} pour un contraste maximal \\
+Cercles concentriques & 4 cercles de distance~: 2.5 m, 5 m, 7.5 m, 10 m \\
+Croix de quadrant & Axes avant/arrière/gauche/droite \\
+Point central & Position du robot (cyan) \\
+Points de mesure & Couleur interpolée rouge $\rightarrow$ vert selon la distance \\
+Labels directionnels & AVANT, ARRIÈRE, G, D \\
+\bottomrule
+\end{tabularx}
+\caption{Éléments graphiques du visualiseur LIDAR}
+\end{table}
+
+\begin{lstlisting}[language=JavaScript, caption={Abonnement au topic /scan}]
+var scanSubscriber = new ROSLIB.Topic({
+  ros         : ros,
+  name        : '/scan',
+  messageType : 'sensor_msgs/LaserScan',
+  throttle_rate : 100  // max 10 Hz pour le rendu
+});
+
+scanSubscriber.subscribe(function(msg) {
+  drawScan(
+    msg.ranges,
+    msg.angle_min,
+    msg.angle_increment,
+    Math.min(msg.range_max, 10.0)
+  );
+  // Mise a jour du compteur de points
+  var valid = msg.ranges.filter(function(r) {
+    return isFinite(r) && r > 0 && r <= msg.range_max;
+  }).length;
+  document.getElementById('lidar-points').textContent = valid + ' pts';
+});
+\end{lstlisting}
+
+\subsection{Corrections apportées dans vision\_lidar}
+
+\begin{warnbox}[Bugs corrigés dans vision\_lidar.js et vision\_lidar.html]
+\begin{enumerate}
+  \item Le fichier HTML référençait \texttt{vision-lidar.js} (avec un tiret) au lieu de \texttt{vision\_lidar.js} (avec un underscore). Le script n'était donc jamais chargé.
+  \item Le fichier JavaScript original s'abonnait à des topics de déplacement (\texttt{/deplacement\_avant}, etc.) au lieu du topic \texttt{/scan}. Aucune donnée LIDAR n'était reçue.
+  \item L'affichage utilisait une iframe vide au lieu d'un canvas HTML5.
+\end{enumerate}
+\end{warnbox}
+
+\section{Intégration de la caméra}
+
+\subsection{Contexte}
+
+La caméra du robot publie son flux vidéo sur le topic \texttt{/cv\_camera/image\_raw/compressed} sous forme d'images JPEG encodées en Base64. L'objectif est d'afficher ce flux en temps réel dans la page \texttt{vision\_camera.html}.
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{lll}
+\toprule
+\textbf{Topic} & \textbf{Type} & \textbf{Direction} \\
+\midrule
+\texttt{/cv\_camera/image\_raw/compressed} & \texttt{sensor\_msgs/CompressedImage} & Abonné \\
+\bottomrule
+\end{tabularx}
+\caption{Topic caméra utilisé}
+\end{table}
+
+\subsection{Affichage du flux}
+
+\begin{lstlisting}[language=JavaScript, caption={Réception et affichage du flux caméra}]
+var listener = new ROSLIB.Topic({
+  ros         : ros,
+  name        : '/cv_camera/image_raw/compressed',
+  messageType : 'sensor_msgs/CompressedImage'
+});
+
+listener.subscribe(function(message) {
+  var img = document.getElementById('image_sub');
+  if (img) {
+    // Decodage Base64 et affichage direct dans un element img
+    img.src = 'data:image/jpeg;base64,' + message.data;
+    // Masquer le message "En attente du flux..."
+    var nosignal = document.getElementById('cam-no-signal');
+    if (nosignal) nosignal.style.display = 'none';
+  }
+});
+\end{lstlisting}
+
+\subsection{Corrections apportées dans vision\_camera}
+
+\begin{warnbox}[Bug critique corrigé — IDs dupliqués]
+Le fichier \texttt{vision\_camera.html} original contenait \textbf{8 éléments} \texttt{<img id="image\_sub">} identiques. Le DOM HTML impose l'unicité des IDs~: la méthode \texttt{document.getElementById('image\_sub')} ne pouvait cibler qu'un seul élément~; les 7 autres restaient invisibles. La correction a consisté à réduire le fichier à \textbf{un seul élément} \texttt{<img id="image\_sub">}.
+\end{warnbox}
+
+\section{Dashboard final — Quatre panneaux}
+
+La deuxième étape a également abouti à la refonte complète du fichier \texttt{index.html} en un \textbf{dashboard 4 panneaux} affichant simultanément~:
+
+\begin{enumerate}
+  \item \textbf{Déplacement Robot}~: contrôle directionnel et télémétrie.
+  \item \textbf{Vision LIDAR}~: canvas de visualisation en temps réel.
+  \item \textbf{Caméra}~: flux vidéo principal.
+  \item \textbf{Contrôle Bras}~: sliders et positions pré-définies.
+\end{enumerate}
+
+\begin{lstlisting}[language=HTML5, caption={Structure du dashboard 4 panneaux (index.html)}]
+<div id="dashboard">
+  <div class="panel">
+    <div class="panel-title">Deplacement Robot</div>
+    <iframe id="frame-deplacement" src="deplacement_robot.html"></iframe>
+  </div>
+  <div class="panel">
+    <div class="panel-title">Vision LIDAR</div>
+    <iframe id="frame-lidar" src="vision_lidar.html"></iframe>
+  </div>
+  <div class="panel">
+    <div class="panel-title">Camera</div>
+    <iframe id="frame-camera" src="vision_camera.html"></iframe>
+  </div>
+  <div class="panel">
+    <div class="panel-title">Controle Bras</div>
+    <iframe id="frame-bras" src="deplacement_bras.html"></iframe>
+  </div>
+</div>
+\end{lstlisting}
+
+\begin{successbox}[Résultats de l'étape 2]
+À l'issue de la deuxième étape, l'opérateur dispose d'un dashboard unifié offrant simultanément le pilotage du robot, la cartographie LIDAR en temps réel et la surveillance vidéo de l'environnement.
+\end{successbox}
+
+% ════════════════════════════════════════════════════════════════
+\chapter{Synthèse des corrections et améliorations}
+
+\section{Tableau récapitulatif des bugs corrigés}
+
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{p{3.5cm}Xp{3.5cm}}
+\toprule
+\textbf{Fichier} & \textbf{Bug identifié} & \textbf{Correction} \\
+\midrule
+\texttt{deplacement\_robot.js} \texttt{vision\_camera.js} &
+Subscribers 2 à 5 appelaient \texttt{subscriber1.subscribe()} &
+Chaque subscriber appelle sa propre méthode \\
+\midrule
+\texttt{vision\_lidar.html} &
+Référence JS incorrecte~: \texttt{vision-lidar.js} &
+Corrigé en \texttt{vision\_lidar.js} \\
+\midrule
+\texttt{vision\_camera.html} &
+8 éléments \texttt{<img>} avec le même \texttt{id="image\_sub"} &
+Réduit à 1 seul élément \\
+\midrule
+\texttt{deplacement\_robot.html} &
+éléments DOM manquants pour la télémétrie &
+Ajout des \texttt{<span>} vitesse1/2, inclinaison1/2, boussole \\
+\midrule
+\texttt{vision\_lidar.js} &
+Abonné à des topics de déplacement, pas à \texttt{/scan} &
+Réécriture complète avec subscriber \texttt{/scan} \\
+\midrule
+\texttt{vision\_lidar.js} &
+Affichage via iframe vide &
+Remplacé par un canvas HTML5 \\
+\bottomrule
+\end{tabularx}
+\caption{Tableau récapitulatif des bugs corrigés}
+\end{table}
+
+\section{Améliorations apportées}
+
+\begin{itemize}
+  \item \textbf{Indicateurs de connexion ROS}~: un badge \textcolor{successgreen}{\textbf{🟢 Connecté}} / \textcolor{codered}{\textbf{🔴 Déconnecté}} est affiché en temps réel sur toutes les pages grâce aux événements \texttt{ros.on('connection')}, \texttt{ros.on('error')}, \texttt{ros.on('close')}.
+  \item \textbf{IP configurable dynamiquement}~: l'IP du robot est saisie une seule fois dans le dashboard, stockée en \texttt{localStorage} et propagée à toutes les iframes.
+  \item \textbf{Message d'attente}~: un message informatif s'affiche tant que le flux caméra ou LIDAR n'est pas reçu.
+  \item \textbf{Compteur de points LIDAR}~: le nombre de points valides détectés par le LIDAR est affiché en temps réel.
+\end{itemize}
+
+% ════════════════════════════════════════════════════════════════
+\chapter{Guide de déploiement}
+
+\section{Lancer le serveur de fichiers}
+
+\begin{lstlisting}[language=bash, caption={Démarrage du serveur HTTP pour l'IHM}]
+# Se placer dans le dossier de l'interface (branche : interface)
+cd /path/to/RoboCup_ws/IHM_Robot_RMS
+
+# Lancer le serveur local
+python3 -m http.server 8080
+
+# Ouvrir dans le navigateur
+# http://localhost:8080
+\end{lstlisting}
+
+\section{Lancer rosbridge sur le robot}
+
+\begin{lstlisting}[language=bash, caption={Démarrage de rosbridge\_server}]
+# Sur le robot (ROS 2 Jazzy)
+ros2 launch rosbridge_server rosbridge_websocket_launch.xml
+# ou
+ros2 run rosbridge_server rosbridge_websocket
+\end{lstlisting}
+
+\section{Configuration réseau}
+
+\begin{enumerate}
+  \item Verifier que le PC opérateur et le robot sont sur le \textbf{même réseau local}.
+  \item Dans la barre IP du dashboard, saisir l'\textbf{IP du robot} (ex.~: \texttt{192.168.137.82}).
+  \item Cliquer \textbf{Appliquer}~: toutes les iframes reconnectent automatiquement.
+\end{enumerate}
+
+\begin{infobox}[Test sans robot]
+L'interface peut être ouverte sans robot connecté. Les indicateurs affichent \textcolor{codered}{\textbf{🔴 Déconnecté}} et les zones de données restent vides, mais aucune erreur JavaScript n'est générée.
+\end{infobox}
+
+% ════════════════════════════════════════════════════════════════
+\chapter*{Conclusion}
+\addcontentsline{toc}{chapter}{Conclusion}
+\markboth{Conclusion}{}
+
+Ce rapport a présenté le développement de l'interface IHM web du robot RMS en deux étapes complémentaires.
+
+La \textbf{première étape}, réalisée par SERRHINI Abdellah, a posé les bases fonctionnelles de l'interface~: connexion via rosbridge, téléopération complète du robot (déplacement, flippers, caméra), contrôle du bras robotique à 6 degrés de liberté et affichage de la télémétrie en temps réel.
+
+La \textbf{deuxième étape}, réalisée par Mounih Mohamed, a enrichi cette base avec deux modules de perception~: un visualiseur LIDAR en temps réel basé sur Canvas HTML5 et l'intégration du flux caméra compressé. Ces ajouts ont transformé l'interface en un véritable poste de supervision permettant à l'opérateur d'avoir une conscience situationnelle complète pendant la mission.
+
+L'interface, entièrement statique, légère et sans dépendance côté client, constitue un outil de contrôle robuste et extensible pour les missions RoboCup Rescue.
+
+\end{document}
