@@ -4,33 +4,130 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vision LIDAR</title>
 
   <script type="text/javascript" src="../js/EventEmitter2-master/lib/eventemitter2.js"></script>
   <script type="text/javascript" src="../js/roslibjs-develop/build/roslib.js"></script>
-  <script type="text/javascript" src="vision-lidar.js"></script>
 
   <link rel="stylesheet" href="vision_lidar.css">
-  <title>Vision LIDAR</title>
+  <style>
+    body {
+      margin: 0;
+      background: #050510;
+      color: #e0e0e0;
+      font-family: monospace;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px;
+      background: #0d0d1f;
+      border-bottom: 1px solid rgba(0, 200, 255, 0.2);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: #00e5ff;
+    }
+
+    #choix {
+      display: flex;
+      gap: 8px;
+    }
+
+    #choix button {
+      background: #1a1a2e;
+      color: #00e5ff;
+      border: 1px solid #00e5ff;
+      border-radius: 6px;
+      padding: 5px 14px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    #choix button:hover {
+      background: #00e5ff;
+      color: #000;
+    }
+
+    #lidar-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px;
+    }
+
+    #lidar-canvas {
+      border: 1px solid rgba(0, 200, 255, 0.3);
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0, 200, 255, 0.15);
+    }
+
+    #lidar-info {
+      margin-top: 8px;
+      display: flex;
+      gap: 20px;
+      font-size: 0.8rem;
+      color: rgba(0, 200, 255, 0.7);
+    }
+
+    #ros-status {
+      font-weight: bold;
+    }
+
+    .ip-config {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+    }
+
+    .ip-config input {
+      background: #1a1a2e;
+      color: #00e5ff;
+      border: 1px solid rgba(0, 200, 255, 0.4);
+      border-radius: 4px;
+      padding: 3px 8px;
+      width: 140px;
+    }
+
+    .ip-config button {
+      background: #1a1a2e;
+      color: #00e5ff;
+      border: 1px solid #00e5ff;
+      border-radius: 4px;
+      padding: 3px 10px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <header>
-  <div>
-    <h1>Vision</h1>
-  </div>
+  <h1>Vision LIDAR</h1>
   <div id="choix">
-    <a href="vision_camera.html">
-      <button id="button_camera">Caméra</button>
-    </a>
-    <a href="vision_lidar.html">
-      <button id="button_lidar">LIDAR</button>
-    </a>
+    <a href="vision_camera.html"><button id="button_camera">Caméra</button></a>
+    <a href="vision_lidar.html"><button id="button_lidar">LIDAR</button></a>
+  </div>
+  <div class="ip-config">
+    IP: <input id="ros-ip-input" type="text" placeholder="192.168.137.82" value="192.168.137.82">
+    <button onclick="updateRosUrl()">Connecter</button>
   </div>
 </header>
 
 <body>
+  <div id="lidar-container">
+    <canvas id="lidar-canvas" width="500" height="500"></canvas>
+    <div id="lidar-info">
+      <span id="ros-status">🔴 Déconnecté</span>
+      <span>Points valides: <b id="lidar-points">0 pts</b></span>
+      <span>Topic: <code>/scan</code></span>
+    </div>
+  </div>
 
-<iframe src="http://localhost:8888"></iframe>
-
+  <script type="text/javascript" src="vision_lidar.js"></script>
 </body>
 
 </html>

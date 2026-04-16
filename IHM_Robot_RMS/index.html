@@ -4,23 +4,125 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <title>Pilotage général</title>
+  <title>RMS – Tableau de bord robot</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #05050f; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; height: 100vh; display: flex; flex-direction: column; }
+
+    /* ─── Header ─── */
+    #topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 20px;
+      background: linear-gradient(90deg, #0d0d1f, #0a1628);
+      border-bottom: 1px solid rgba(0,200,255,0.25);
+      flex-shrink: 0;
+    }
+    #topbar h1 { font-size: 1.1rem; color: #00e5ff; letter-spacing: 2px; text-transform: uppercase; }
+    #topbar .badge { font-size: 0.75rem; background: rgba(0,200,255,0.1); border: 1px solid rgba(0,200,255,0.3); color: #00e5ff; border-radius: 20px; padding: 3px 12px; }
+
+    /* ─── IP Config bar ─── */
+    #config-bar {
+      display: flex; align-items: center; gap: 10px; padding: 6px 20px;
+      background: #080820; border-bottom: 1px solid rgba(0,200,255,0.1);
+      font-size: 0.8rem; color: rgba(255,255,255,0.5);
+      flex-shrink: 0;
+    }
+    #config-bar input {
+      background: #1a1a2e; color: #00e5ff; border: 1px solid rgba(0,200,255,0.3);
+      border-radius: 4px; padding: 3px 10px; width: 160px; font-size: 0.8rem;
+    }
+    #config-bar button {
+      background: transparent; color: #00e5ff; border: 1px solid #00e5ff;
+      border-radius: 4px; padding: 3px 12px; cursor: pointer; font-size: 0.8rem;
+    }
+    #config-bar button:hover { background: #00e5ff; color: #000; }
+
+    /* ─── Dashboard grid ─── */
+    #dashboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 8px;
+      padding: 8px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .panel {
+      background: #0a0a1f;
+      border: 1px solid rgba(0,200,255,0.15);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .panel-title {
+      padding: 5px 12px;
+      background: rgba(0,200,255,0.07);
+      border-bottom: 1px solid rgba(0,200,255,0.12);
+      font-size: 0.75rem;
+      color: #00e5ff;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .panel iframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+      background: transparent;
+    }
+  </style>
 </head>
 
 <body>
 
-  <div id="container">
-    <div id="box1">
-      <iframe src="deplacement_robot.html"></iframe>
-    </div>
-
-    <div id="box2">
-      <iframe src="vision_camera.html"></iframe>
-    </div>
+  <div id="topbar">
+    <h1>🤖 RMS — Tableau de bord</h1>
+    <span class="badge">RoboCup Rescue 2024</span>
   </div>
 
+  <div id="config-bar">
+    🌐 IP Robot:
+    <input id="ip-input" type="text" placeholder="192.168.137.82" value="192.168.137.82">
+    <button onclick="applyIp()">Appliquer</button>
+    <span style="color:rgba(255,255,255,0.3)">| Les iframes se rechargent automatiquement</span>
+  </div>
+
+  <div id="dashboard">
+
+    <div class="panel">
+      <div class="panel-title">🕹️ Déplacement Robot</div>
+      <iframe id="frame-deplacement" src="deplacement_robot.html"></iframe>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">📡 Vision LIDAR</div>
+      <iframe id="frame-lidar" src="vision_lidar.html"></iframe>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">📷 Caméra</div>
+      <iframe id="frame-camera" src="vision_camera.html"></iframe>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">🦾 Contrôle Bras</div>
+      <iframe id="frame-bras" src="deplacement_bras.html"></iframe>
+    </div>
+
+  </div>
+
+  <script>
+    function applyIp() {
+      var ip = document.getElementById('ip-input').value.trim();
+      if (!ip) return;
+      localStorage.setItem('ros_url', 'ws://' + ip + ':9090');
+      ['frame-deplacement', 'frame-lidar', 'frame-camera', 'frame-bras'].forEach(function(id) {
+        var f = document.getElementById(id);
+        f.src = f.src; // force reload
+      });
+    }
+  </script>
 
 </body>
-
 </html>

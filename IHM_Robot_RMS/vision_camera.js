@@ -1,242 +1,262 @@
 //Lien du serveur 
-var ros = new ROSLIB.Ros({
+var ROS_URL = localStorage.getItem('ros_url') || 'ws://192.168.137.82:9090';
+var ros = new ROSLIB.Ros({ url: ROS_URL });
 
-      url : 'ws://192.168.137.82:9090'
-
-    });
+ros.on('connection', function () {
+  var s = document.getElementById('ros-status-cam');
+  if (s) { s.textContent = '🟢 Connecté'; s.style.color = '#4caf50'; }
+  console.log('Connected to websocket server.');
+});
+ros.on('error', function () {
+  var s = document.getElementById('ros-status-cam');
+  if (s) { s.textContent = '🔴 Déconnecté'; s.style.color = '#f44336'; }
+  console.log('Error connecting to websocket server.');
+});
+ros.on('close', function () {
+  var s = document.getElementById('ros-status-cam');
+  if (s) { s.textContent = '🔴 Déconnecté'; s.style.color = '#f44336'; }
+  console.log('Connection to websocket server closed.');
+});
 
 
 //Declaration du Topic 1
-    var topic1 = new ROSLIB.Topic({
+var topic1 = new ROSLIB.Topic({
 
-      ros : ros,
+  ros: ros,
 
-      name : '/deplacement_avant',
+  name: '/deplacement_avant',
 
-      messageType : 'std_msgs/Bool'
+  messageType: 'std_msgs/Bool'
 
-    });
+});
 //Envoi du Topic 1
-    function deplacement_avant() {
+function deplacement_avant() {
 
-      var message = new ROSLIB.Message({
+  var message = new ROSLIB.Message({
 
-        data : true
-      });
+    data: true
+  });
 
-      topic1.publish(message);
+  topic1.publish(message);
 
-      console.log('Message publié sur le topic /message');
+  console.log('Message publié sur le topic /message');
 
-    }
+}
 
 //Declaration du Topic 2
-    var topic2 = new ROSLIB.Topic({
+var topic2 = new ROSLIB.Topic({
 
-      ros : ros,
+  ros: ros,
 
-      name : '/deplacement_arriere',
+  name: '/deplacement_arriere',
 
-      messageType : 'std_msgs/Bool'
+  messageType: 'std_msgs/Bool'
 
-    });
+});
 //Envoi du Topic 2
-    function deplacement_arriere() {
+function deplacement_arriere() {
 
-      var message = new ROSLIB.Message({
+  var message = new ROSLIB.Message({
 
-        data : true
-      });
+    data: true
+  });
 
-      topic2.publish(message);
+  topic2.publish(message);
 
-      console.log('Message publié sur le topic /message');
+  console.log('Message publié sur le topic /message');
 
-    }
+}
 
 
-    //Declaration du Topic 3
-    var topic3 = new ROSLIB.Topic({
+//Declaration du Topic 3
+var topic3 = new ROSLIB.Topic({
 
-      ros : ros,
+  ros: ros,
 
-      name : '/deplacement_droite',
+  name: '/deplacement_droite',
 
-      messageType : 'std_msgs/Bool'
+  messageType: 'std_msgs/Bool'
 
-    });
+});
 //Envoi du Topic 3
-    function deplacement_droite() {
+function deplacement_droite() {
 
-      var message = new ROSLIB.Message({
+  var message = new ROSLIB.Message({
 
-        data : true
-      });
+    data: true
+  });
 
-      topic3.publish(message);
+  topic3.publish(message);
 
-      console.log('Message publié sur le topic /message');
+  console.log('Message publié sur le topic /message');
 
-    }
+}
 
 //Declaration du Topic 4
-    var topic4 = new ROSLIB.Topic({
+var topic4 = new ROSLIB.Topic({
 
-      ros : ros,
+  ros: ros,
 
-      name : '/deplacement_gauche',
+  name: '/deplacement_gauche',
 
-      messageType : 'std_msgs/Bool'
+  messageType: 'std_msgs/Bool'
 
-    });
+});
 //Envoi du Topic 4
-    function deplacement_gauche() {
+function deplacement_gauche() {
 
-      var message = new ROSLIB.Message({
+  var message = new ROSLIB.Message({
 
-        data : true
-      });
+    data: true
+  });
 
-      topic4.publish(message);
+  topic4.publish(message);
 
-      console.log('Message publié sur le topic /message');
+  console.log('Message publié sur le topic /message');
 
-    }
+}
 
-    //Declaration du Topic 5
-    var topic5 = new ROSLIB.Topic({
+//Declaration du Topic 5
+var topic5 = new ROSLIB.Topic({
 
-      ros : ros,
+  ros: ros,
 
-      name : '/stop',
+  name: '/stop',
 
-      messageType : 'std_msgs/Bool'
+  messageType: 'std_msgs/Bool'
 
-    });
+});
 //Envoi du Topic 5
-    function stop() {
+function stop() {
 
-      var message = new ROSLIB.Message({
+  var message = new ROSLIB.Message({
 
-        data : true
-      });
+    data: true
+  });
 
-      topic5.publish(message);
+  topic5.publish(message);
 
-      console.log('Message publié sur le topic /message');
+  console.log('Message publié sur le topic /message');
 
-    }
+}
 
 
 
 
 //Definition du Subscriber 1
-    var subscriber1 = new ROSLIB.Topic({
+var subscriber1 = new ROSLIB.Topic({
 
-      ros : ros,
+  ros: ros,
 
-      name : '/vitesse1',
+  name: '/vitesse1',
 
-      messageType : 'std_msgs/Int32'
+  messageType: 'std_msgs/Int32'
 
-    });
+});
 
 //Affiche sur la page web du message present dans le Subscriber 1
-    subscriber1.subscribe(function(message) {
+subscriber1.subscribe(function (message) {
 
-      console.log('Message reçu :', message.data);
-      document.getElementById('vitesse1').innerHTML = message.data;
+  console.log('Message reçu :', message.data);
+  var el = document.getElementById('vitesse1');
+  if (el) el.innerHTML = message.data;
 
-    });
+});
 
 //Definition du Subscriber 2
-    var subscriber2 = new ROSLIB.Topic({
+var subscriber2 = new ROSLIB.Topic({
 
-      ros : ros,
+  ros: ros,
 
-      name : '/vitesse2',
+  name: '/vitesse2',
 
-      messageType : 'std_msgs/Int32'
+  messageType: 'std_msgs/Int32'
 
-    });
+});
 
-//Affiche sur la page web du message present dans le Subscriber 1
-    subscriber1.subscribe(function(message) {
+//Affiche sur la page web du message present dans le Subscriber 2
+subscriber2.subscribe(function (message) {
 
-      console.log('Message reçu :', message.data);
-      document.getElementById('vitesse2').innerHTML = message.data;
+  console.log('Message reçu :', message.data);
+  var el = document.getElementById('vitesse2');
+  if (el) el.innerHTML = message.data;
 
-    });
+});
 
 //Definition du Subscriber 3
-    var subscriber3 = new ROSLIB.Topic({
+var subscriber3 = new ROSLIB.Topic({
 
-      ros : ros,
+  ros: ros,
 
-      name : '/inclinaison1',
+  name: '/inclinaison1',
 
-      messageType : 'std_msgs/Int32'
+  messageType: 'std_msgs/Int32'
 
-    });
+});
 
-//Affiche sur la page web du message present dans le Subscriber 1
-    subscriber1.subscribe(function(message) {
+//Affiche sur la page web du message present dans le Subscriber 3
+subscriber3.subscribe(function (message) {
 
-      console.log('Message reçu :', message.data);
-      document.getElementById('inclinaison1').innerHTML = message.data;
+  console.log('Message reçu :', message.data);
+  var el = document.getElementById('inclinaison1');
+  if (el) el.innerHTML = message.data;
 
-    });
+});
 
 //Definition du Subscriber 4
-    var subscriber4 = new ROSLIB.Topic({
+var subscriber4 = new ROSLIB.Topic({
 
-      ros : ros,
+  ros: ros,
 
-      name : '/inclinaison2',
+  name: '/inclinaison2',
 
-      messageType : 'std_msgs/Int32'
+  messageType: 'std_msgs/Int32'
 
-    });
+});
 
-//Affiche sur la page web du message present dans le Subscriber 1
-    subscriber1.subscribe(function(message) {
+//Affiche sur la page web du message present dans le Subscriber 4
+subscriber4.subscribe(function (message) {
 
-      console.log('Message reçu :', message.data);
-      document.getElementById('inclinaison2').innerHTML = message.data;
+  console.log('Message reçu :', message.data);
+  var el = document.getElementById('inclinaison2');
+  if (el) el.innerHTML = message.data;
 
-    });
+});
 
-    //Definition du Subscriber 5
-    var subscriber5 = new ROSLIB.Topic({
+//Definition du Subscriber 5
+var subscriber5 = new ROSLIB.Topic({
 
-      ros : ros,
+  ros: ros,
 
-      name : '/boussole',
+  name: '/boussole',
 
-      messageType : 'std_msgs/Int32'
+  messageType: 'std_msgs/Int32'
 
-    });
+});
 
-//Affiche sur la page web du message present dans le Subscriber 1
-    subscriber1.subscribe(function(message) {
+//Affiche sur la page web du message present dans le Subscriber 5
+subscriber5.subscribe(function (message) {
 
-      console.log('Message reçu :', message.data);
-      document.getElementById('boussole').innerHTML = message.data;
+  console.log('Message reçu :', message.data);
+  var el = document.getElementById('boussole');
+  if (el) el.innerHTML = message.data;
 
-    });
+});
 
 
 
-    //Camera visible sur la page 
-    var listener = new ROSLIB.Topic({
-    ros : ros,
-    name : '/cv_camera/image_raw/compressed',
-    messageType : 'sensor_msgs/CompressedImage'
-    //messageType : 'sensor_msgs/Image'
-    });
+//Camera visible sur la page 
+var listener = new ROSLIB.Topic({
+  ros: ros,
+  name: '/cv_camera/image_raw/compressed',
+  messageType: 'sensor_msgs/CompressedImage'
+});
 
-    listener.subscribe(function(message) {
-    console.log('Received message on ' + listener.name);
-    document.getElementById('image_sub').src = "data:image/jpeg;base64," + message.data;
-    //listener.unsubscribe();
-    });
+listener.subscribe(function (message) {
+  var img = document.getElementById('image_sub');
+  if (img) {
+    img.src = "data:image/jpeg;base64," + message.data;
+    var nosignal = document.getElementById('cam-no-signal');
+    if (nosignal) nosignal.style.display = 'none';
+  }
+});
