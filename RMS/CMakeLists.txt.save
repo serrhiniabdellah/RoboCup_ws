@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(bras_robotik)
+project(mt3_opencv)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -75,11 +75,11 @@ find_package( OpenCV REQUIRED )
 # )
 
 ## Generate added messages and services with any dependencies listed here
-generate_messages(
-  DEPENDENCIES
-  std_msgs
-  geometry_msgs
-)
+#generate_messages(
+#  DEPENDENCIES
+#  std_msgs
+#  geometry_msgs
+#)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -113,7 +113,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES opencv_example
-   CATKIN_DEPENDS roscpp std_msgs message_runtime cv_bridge sensor_msgs geometry_msgs 
+   CATKIN_DEPENDS roscpp std_msgs message_runtime cv_bridge sensor_msgs 
 #  DEPENDS system_lib
 )
 
@@ -125,7 +125,6 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
 # include
-  include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -142,17 +141,11 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(listener_node2 src/SubscriberV3.cpp )
-add_executable(listener_node3 src/SubscriberBras2.cpp )
+add_executable(${PROJECT_NAME}_node src/mt3_opencv.cpp)
+add_executable(${PROJECT_NAME}_node src/mt3_opencv.cpp)
+target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES} ${OpenCV_LIBRARI>
+target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
-
-target_link_libraries(listener_node2 ${catkin_LIBRARIES})
-
-target_link_libraries(listener_node3 ${catkin_LIBRARIES})
-
-##add_executable(listener_node3 src/SubscriberBras2 )
-
-#target_link_libraries(listener_node3 ${catkin_LIBRARIES})
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -177,10 +170,10 @@ target_link_libraries(listener_node3 ${catkin_LIBRARIES})
 
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
-catkin_install_python(PROGRAMS src/slider.py src/Slider01.py
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
-
+# install(PROGRAMS
+#   scripts/my_python_script
+#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+# )
 
 ## Mark executables and/or libraries for installation
 # install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_node

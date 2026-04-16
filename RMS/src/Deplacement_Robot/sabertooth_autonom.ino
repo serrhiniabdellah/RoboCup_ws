@@ -1,6 +1,6 @@
 #define nullptr NULL
 #include <ros.h>
-#include <geometry_msgs/Point.h>// On inclut un nouveau type de message pour communiquer de la Ras vers l'arduino 
+#include <geometry_msgs/Point.h> // On inclut un nouveau type de message pour communiquer de la Ras vers l'arduino
 #include <SabertoothSimplified.h>
 
 SabertoothSimplified ST1(Serial1); // Utilise Serial1 pour communiquer avec le premier Sabertooth sur un Arduino Mega

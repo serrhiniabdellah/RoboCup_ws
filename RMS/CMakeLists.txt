@@ -1,93 +1,124 @@
-cmake_minimum_required(VERSION 3.8)
-project(rms_lidar)
+cmake_minimum_required(VERSION 2.8.3)
+project(Robocup2024_PaysBas)
 
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
+## Compile as C++11, supported in ROS Kinetic and newer 
+add_compile_options(-std=c++11)
 
-# Find dependencies
-find_package(ament_cmake REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(std_msgs REQUIRED)
-find_package(sensor_msgs REQUIRED)
-find_package(geometry_msgs REQUIRED)
-find_package(nav_msgs REQUIRED)
-find_package(tf2 REQUIRED)
-find_package(tf2_ros REQUIRED)
-find_package(tf2_geometry_msgs REQUIRED)
-find_package(image_transport REQUIRED)
-find_package(cv_bridge REQUIRED)
+## Find catkin macros and libraries
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  message_generation
+  std_msgs
+  cv_bridge
+  sensor_msgs
+  image_transport
+  geometry_msgs
+  tf2_ros
+  tf2
+)
+
 find_package(OpenCV REQUIRED)
+find_package(PCL REQUIRED)
+find_package(PythonLibs 3 REQUIRED)
 
-set(LIDAR_DEPS
-  rclcpp
+include_directories(
+  ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
+  ${PCL_INCLUDE_DIRS}
+  ${PYTHON_INCLUDE_DIRS}
+  /home/ros/catkin_ws/src/Robocup2024_PaysBas/matplotlib-cpp
+)
+
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+
+
+################################################
+## Declare ROS messages, services and actions ##
+################################################
+
+## Generate services in the 'srv' folder
+add_service_files(
+  FILES
+  Traitement_HSV.srv
+  Pas.srv
+)
+
+## Generate added messages and services with any dependencies listed here
+generate_messages(
+  DEPENDENCIES
   std_msgs
   sensor_msgs
   geometry_msgs
-  nav_msgs
-  tf2
-  tf2_ros
-  tf2_geometry_msgs
-  image_transport
-  cv_bridge
 )
 
-# ── Exploration Publisher (nœud principal navigation autonome) ──
-add_executable(exploration_publisher_node
-  src/Lidar/Exploration_Publisher.cpp
-)
-ament_target_dependencies(exploration_publisher_node ${LIDAR_DEPS})
-target_link_libraries(exploration_publisher_node ${OpenCV_LIBS})
-
-# ── Exploration automatique intelligente ──
-add_executable(exploration_auto_intelligente_node
-  src/Lidar/Exploration_automatique_intelligente.cpp
-)
-ament_target_dependencies(exploration_auto_intelligente_node ${LIDAR_DEPS})
-target_link_libraries(exploration_auto_intelligente_node ${OpenCV_LIBS})
-
-# ── Récupération données auto (enregistrement trajectoire + manette) ──
-add_executable(recuperation_data_auto_node
-  src/Lidar/recuperation_data_auto.cpp
-)
-ament_target_dependencies(recuperation_data_auto_node ${LIDAR_DEPS})
-target_link_libraries(recuperation_data_auto_node ${OpenCV_LIBS})
-
-# ── Copie Trajet (rejeu trajectoire) ──
-add_executable(copie_trajet_node
-  src/Lidar/Copie_Trajet.cpp
-)
-ament_target_dependencies(copie_trajet_node ${LIDAR_DEPS})
-target_link_libraries(copie_trajet_node ${OpenCV_LIBS})
-
-# ── Rescue (prise de photos caméra) ──
-add_executable(rescue_node
-  src/Lidar/Rescue.cpp
-)
-ament_target_dependencies(rescue_node ${LIDAR_DEPS})
-target_link_libraries(rescue_node ${OpenCV_LIBS})
-
-# ── Initialisation Accéléromètre ──
-add_executable(init_accelero_node
-  src/Lidar/Initialisation_Accelero.cpp
-)
-ament_target_dependencies(init_accelero_node ${LIDAR_DEPS})
-target_link_libraries(init_accelero_node ${OpenCV_LIBS})
-
-# Install executables
-install(TARGETS
-  exploration_publisher_node
-  exploration_auto_intelligente_node
-  recuperation_data_auto_node
-  copie_trajet_node
-  rescue_node
-  init_accelero_node
-  DESTINATION lib/${PROJECT_NAME}
+###################################
+## catkin specific configuration ##
+###################################
+catkin_package(
+  CATKIN_DEPENDS roscpp std_msgs message_runtime cv_bridge sensor_msgs
+  DEPENDS PCL OpenCV
 )
 
-# Install launch files
-install(DIRECTORY launch/
-  DESTINATION share/${PROJECT_NAME}/launch
-)
+###########
+## Build ##
+###########
 
-ament_package()
+
+## Declare a C++ executable
+
+# Ajouter les exécutables
+add_executable(${PROJECT_NAME}_QRcode_node src/QRCode/QRcode.cpp)
+add_executable(${PROJECT_NAME}_republish_joy_node src/Deplacement_Robot/republish_joy.cpp)
+add_executable(${PROJECT_NAME}_lot_camera_node src/Camera_Economique/Rescue.cpp)
+add_executable(${PROJECT_NAME}_node src/Camera_Economique/Rescue.cpp)
+add_executable(${PROJECT_NAME}_copie_trajet_node src/Lidar/Copie_Trajet.cpp)
+add_executable(${PROJECT_NAME}_Exploration_automatique_intelligente_node src/Lidar/Exploration_automatique_intelligente.cpp)
+add_executable(${PROJECT_NAME}_Initialisation_Accelero_node src/Lidar/Initialisation_Accelero.cpp)
+add_executable(${PROJECT_NAME}_Bras_Automatique_node src/Bras_Automatique/Bras_Automatique.cpp src/Bras_Automatique/Finder.cpp)
+add_executable(${PROJECT_NAME}_HSV_node src/Bras_Automatique/HSV_CAT.cpp)
+add_executable(${PROJECT_NAME}_recuperation_data_auto_node src/Lidar/recuperation_data_auto.cpp)
+add_executable(${PROJECT_NAME}_Exploration_Publisher_node src/Lidar/Exploration_Publisher.cpp)
+
+# Lier les bibliothèques avec les exécutables
+target_link_libraries(${PROJECT_NAME}_QRcode_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_republish_joy_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_lot_camera_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_copie_trajet_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_Exploration_automatique_intelligente_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_Exploration_Publisher_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_Initialisation_Accelero_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_Bras_Automatique_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_HSV_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_recuperation_data_auto_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_Exploration_Publisher_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+
+# Ajouter des dépendances pour les messages générés
+add_dependencies(${PROJECT_NAME}_republish_joy_node ${PROJECT_NAME}_generate_messages_cpp)
+add_dependencies(${PROJECT_NAME}_lot_camera_node ${PROJECT_NAME}_generate_messages_cpp)
+add_dependencies(${PROJECT_NAME}_Bras_Automatique_node ${PROJECT_NAME}_generate_messages_cpp)
+add_dependencies(${PROJECT_NAME}_HSV_node ${PROJECT_NAME}_generate_messages_cpp)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
