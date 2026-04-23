@@ -7,9 +7,9 @@
   <meta name="viewport" content="user-scalable=no">
 
 
-  <script type="text/javascript" src="../js/EventEmitter2-master/lib/eventemitter2.js"></script>
-  <script type="text/javascript" src="../js/roslibjs-develop/build/roslib.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/eventemitter2@6.4.9/lib/eventemitter2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/roslib@1/build/roslib.min.js"></script>
+  <script type="text/javascript" src="deplacement_bras.js"></script>
   <link rel="stylesheet" href="deplacement_bras.css">
   <title>Déplacement bras</title>
 </head>
@@ -30,58 +30,65 @@
 
 <body>
 
-<div id="haut">
+  <div id="haut">
 
-      <h3>Axes :</h3>
-    
+    <h3>Axes :</h3>
+
     <div class="slider-container">
       <label for="axe7">7</label>
-      <input type="range" class="slider" min="0.45" max="1" value="0.5" step="0.001" id="axe7" name="axe7" onclick="axe7()" >
+      <input type="range" class="slider" min="0.45" max="1" value="0.5" step="0.001" id="axe7" name="axe7"
+        onclick="axe7()">
       <button onclick="changeSliderValue('axe7', -0.001)">-</button>
       <button onclick="changeSliderValue('axe7', 0.001)">+</button>
     </div>
 
     <div class="slider-container">
       <label for="axe6">6</label>
-      <input type="range" class="slider" min="0" max="1" value="0.5" step="0.001" id="axe6" name="axe6" onclick="axe6()" >
+      <input type="range" class="slider" min="0" max="1" value="0.5" step="0.001" id="axe6" name="axe6"
+        onclick="axe6()">
       <button onclick="changeSliderValue('axe6', -0.001)">-</button>
       <button onclick="changeSliderValue('axe6', 0.001)">+</button>
     </div>
 
     <div class="slider-container">
       <label for="axe5">5</label>
-      <input type="range" class="slider" min="0" max="1" value="0.5" step="0.001" id="axe5" name="axe5" onclick="axe5()" >
+      <input type="range" class="slider" min="0" max="1" value="0.5" step="0.001" id="axe5" name="axe5"
+        onclick="axe5()">
       <button onclick="changeSliderValue('axe5', -0.001)">-</button>
       <button onclick="changeSliderValue('axe5', 0.001)">+</button>
     </div>
 
     <div class="slider-container">
-     <label for="axe4">4</label>
-     <input type="range" class="slider" min="0" max="1" value="0.75" step="0.001" id="axe4" name="axe4" onclick="axe4()" >
+      <label for="axe4">4</label>
+      <input type="range" class="slider" min="0" max="1" value="0.75" step="0.001" id="axe4" name="axe4"
+        onclick="axe4()">
       <button onclick="changeSliderValue('axe4', -0.001)">-</button>
       <button onclick="changeSliderValue('axe4', 0.001)">+</button>
     </div>
-   </div>
+  </div>
 
-   <div id="bas">
+  <div id="bas">
 
     <div class="slider-container">
       <label for="axe3">3</label>
-      <input type="range" class="slider" min="0" max="1" value="0.5" step="0.001" id="axe3" name="axe3" onclick="axe3()" >
+      <input type="range" class="slider" min="0" max="1" value="0.5" step="0.001" id="axe3" name="axe3"
+        onclick="axe3()">
       <button onclick="changeSliderValue('axe3', -0.001)">-</button>
       <button onclick="changeSliderValue('axe3', 0.001)">+</button>
     </div>
 
     <div class="slider-container">
       <label for="axe2">2</label>
-      <input type="range" class="slider" min="0" max="1" value="0.5" step="0.001" id="axe2" name="axe2" onclick="axe2()" >
+      <input type="range" class="slider" min="0" max="1" value="0.5" step="0.001" id="axe2" name="axe2"
+        onclick="axe2()">
       <button onclick="changeSliderValue('axe2', -0.001)">-</button>
       <button onclick="changeSliderValue('axe2', 0.001)">+</button>
     </div>
 
     <div class="slider-container">
       <label for="axe1">1</label>
-      <input type="range" class="slider" min="0" max="1" value="0.5" step="0.001" id="axe1" name="axe1" onclick="axe1()" >
+      <input type="range" class="slider" min="0" max="1" value="0.5" step="0.001" id="axe1" name="axe1"
+        onclick="axe1()">
       <button onclick="changeSliderValue('axe1', -0.001)">-</button>
       <button onclick="changeSliderValue('axe1', 0.001)">+</button>
     </div>
@@ -96,4 +103,5 @@
 
   <script type="text/javascript" src="deplacement_bras.js"></script>
 </body>
+
 </html>
